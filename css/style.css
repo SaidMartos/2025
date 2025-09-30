@@ -4,9 +4,9 @@
 html, body {
     margin: 0;
     padding: 0;
-    height: 100vh; /* 100% de la altura de la ventana */
-    width: 100vw;  /* 100% de la anchura de la ventana */
-    overflow: hidden; /* Elimina scroll horizontal y vertical */
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden; /* Elimina scroll */
     
     color: white; 
     font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@ html, body {
 }
 
 /* ------------------------------------- */
-/* 2. CONFIGURACIÓN DEL FONDO (SÚTIL Y SIN BORDES BLANCOS) */
+/* 2. CONFIGURACIÓN DEL FONDO (SIN ZOOM Y BLUR COMPLETO) */
 /* ------------------------------------- */
 body::before {
     content: '';
@@ -30,8 +30,12 @@ body::before {
     height: 100%;
     z-index: -1; 
     
-    /* 🚩 SOLUCIÓN AL BORDE BLANCO: Escalar la imagen un poco para que cubra el área difuminada */
-    transform: scale(1.05); 
+    /* 🚩 SOLUCIÓN AL BORDE SIN USAR ZOOM (scale): 
+       Agrandamos el pseudo-elemento con margen negativo para que el blur no se vea cortado. */
+    margin: -10px; /* Expande el contenedor para que el blur se aplique fuera del borde visible */
+    padding: 10px; /* Compensamos el margen negativo para mantener la posición */
+    
+    /* 🚩 ELIMINADO: Ya no usamos 'transform: scale(1.05);' */
     
     /* Propiedades de la Imagen */
     background-image: url('../img/plaza-de-armas-cajamarca.jpg'); 
@@ -39,10 +43,8 @@ body::before {
     background-repeat: no-repeat; 
     background-position: center center; 
     
-    /* 🚩 DIFUMINADO MÁS SUTIL: Reducido de 2.5px a 1.25px */
-    filter: blur(1.25px); 
-    
-    /* Se mantienen eliminados los tintes oscuros de fondo */
+    /* Nivel de Difuminado */
+    filter: blur(1.5px); 
 }
 
 
@@ -50,7 +52,6 @@ body::before {
 /* 3. ESTILOS DEL CONTENIDO (TEXTO) */
 /* ------------------------------------- */
 .content-box {
-    /* Fondo oscuro para que el texto resalte, usando una opacidad sutil */
     background-color: rgba(0, 0, 0, 0.4); 
     padding: 40px;
     border-radius: 10px;
