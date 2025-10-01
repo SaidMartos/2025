@@ -74,3 +74,23 @@ p {
 .content-box a {
     color: lightblue;
 }
+/* ------------------------------------- */
+/* 4. ESTILOS DEL BOTÓN DE UNITY */
+/* ------------------------------------- */
+.unity-button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 30px;
+    background-color: #007bff; /* Azul de Unity/Web */
+    color: white;
+    text-decoration: none; /* Quitar subrayado */
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.unity-button:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el ratón */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+}
