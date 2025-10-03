@@ -2,33 +2,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Seleccionar elementos clave del DOM
     const track = document.querySelector('.carousel-track');
     const container = document.querySelector('.carousel-container'); 
-    const cards = Array.from(document.querySelectorAll('.carousel-card')); 
     const nextButton = document.querySelector('.carousel-button.next');
     const prevButton = document.querySelector('.carousel-button.prev');
+
+    // 🚩 CLAVE CORREGIDA: Detectar solo las tarjetas originales
+    const originalCards = Array.from(document.querySelectorAll('.carousel-card'));
+    
+    // 🚩 PASO 1: DUPLICACIÓN DINÁMICA DE TARJETAS
+    // Esto asegura que, aunque el HTML solo tiene 4 tarjetas, el track tiene 8 (4 + 4) para el bucle.
+    originalCards.forEach(card => {
+        const clone = card.cloneNode(true);
+        // Opcional: limpiar data-index para evitar IDs duplicados
+        clone.removeAttribute('data-index');
+        track.appendChild(clone);
+    });
+    
+    // Ahora 'cards' incluye el set original y los clones (8 tarjetas en total)
+    const cards = Array.from(document.querySelectorAll('.carousel-card')); 
+    
+    // Parámetros de las tarjetas
+    const originalCardCount = originalCards.length; // ¡Ahora es 4!
     
     // 🚩 CLAVE JS: El valor del gap debe coincidir con el CSS (60px)
     const gap = 60; 
     
-    // Parámetros de las tarjetas
-    const originalCardCount = cards.length / 2; 
     let cardWidth = cards.length > 0 ? cards[0].getBoundingClientRect().width : 0;
+    // El tamaño total para el bucle ahora es el tamaño de las 4 tarjetas originales
     let originalTrackSize = (cardWidth + gap) * originalCardCount; 
     
     // Parámetros de Movimiento Automático (requestAnimationFrame)
     let currentPosition = 0; 
     const autoSpeed = 0.05; // Velocidad muy lenta
-    let animationFrameId; // Para controlar requestAnimationFrame
+    let animationFrameId; 
     
     // Parámetros de Movimiento Manual (Clic de flecha)
-    let isManualMode = false; // Indica si el carrusel está en pausa o en transición manual
+    let isManualMode = false; 
     let currentManualIndex = 0; 
     const transitionTime = 300; 
     const pauseTime = 3000; 
 
     // 🚩 Parámetros de Arrastre (Drag)
     let isDragging = false;
-    let startX = 0; // Posición X inicial del clic
-    let startPosition = 0; // Posición 'currentPosition' al iniciar el arrastre
+    let startX = 0; 
+    let startPosition = 0; 
     
     if (cards.length === 0 || cardWidth === 0) return;
 
@@ -55,23 +71,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FUNCIONES DE ARRASTRE (DRAG) ---
 
     const handleDragStart = (e) => {
-        // Ignorar si ya estamos arrastrando o no es clic izquierdo
         if (isDragging || e.button !== 0) return; 
         
         e.preventDefault(); 
         
-        // 1. Detener el movimiento automático y establecer banderas
         cancelAnimationFrame(animationFrameId);
         isDragging = true;
         isManualMode = true; 
         
-        // 2. Capturar posiciones iniciales
         startX = e.clientX; 
-        
-        // CLAVE CORREGIDA: Usamos la 'currentPosition' mantenida por el auto-scroll
         startPosition = currentPosition;
         
-        // 3. Añadir escuchadores de movimiento y finalización a TODO EL DOCUMENTO
         document.addEventListener('mousemove', handleDragMove);
         document.addEventListener('mouseup', handleDragEnd);
     };
@@ -79,24 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleDragMove = (e) => {
         if (!isDragging) return;
 
-        // Calcular el desplazamiento del ratón (Delta X)
         const dragDistance = e.clientX - startX;
-        
-        // Calcular la nueva posición del carrusel:
-        // El movimiento debe ser: Mover el ratón a la DERECHA (X positivo) debe REDUCIR la posición (mover el carrusel a la DERECHA)
-        // Mover el ratón a la IZQUIERDA (X negativo) debe AUMENTAR la posición (mover el carrusel a la IZQUIERDA)
-        // Por lo tanto, restamos el desplazamiento del ratón.
         let newPosition = startPosition - dragDistance; 
         
-        // Aplicar la nueva posición
         track.style.transform = `translateX(-${newPosition}px)`;
-        
-        // Actualizar la posición actual para que se use como punto de partida
         currentPosition = newPosition; 
     };
 
     const handleDragEnd = () => {
-        // 1. Limpiar los escuchadores
         document.removeEventListener('mousemove', handleDragMove);
         document.removeEventListener('mouseup', handleDragEnd);
 
@@ -104,39 +104,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         isDragging = false;
         
-        // 2. Aplicar un 'snap' (ajuste) a la tarjeta más cercana
         const cardSize = cardWidth + gap;
-        // El índice puede ser negativo o muy grande debido al arrastre libre
         let snappedIndex = Math.round(currentPosition / cardSize); 
         
         const snappedPosition = cardSize * snappedIndex;
         
-        // 3. Aplicamos el 'snap' de forma suave
         track.style.transition = `transform ${transitionTime / 1000}s ease-out`;
         track.style.transform = `translateX(-${snappedPosition}px)`;
         currentPosition = snappedPosition;
         
-        // 4. Después de la transición de 'snap', eliminamos la transición y reanudamos
         setTimeout(() => {
             track.style.transition = 'none';
 
-            // Normalizamos la posición de nuevo al rango del set original (0 a 5)
-            // Calculamos el índice base dentro del set original (0 a originalCardCount - 1)
+            // Normalizamos al rango del set original (0 a 3)
             let baseIndex = snappedIndex % originalCardCount;
-            // Aseguramos que el índice sea positivo si arrastró demasiado hacia la derecha
             if (baseIndex < 0) {
                 baseIndex += originalCardCount;
             }
 
             const resetPosition = cardSize * baseIndex;
 
-            // Hacemos el salto instantáneo si es necesario
             track.style.transform = `translateX(-${resetPosition}px)`;
             currentPosition = resetPosition;
             
             isManualMode = false;
             animateAutoScroll();
-        }, transitionTime); // Esperamos a que termine el deslizamiento de ajuste
+        }, transitionTime); 
     };
 
     // --- FUNCIONES DE NAVEGACIÓN MANUAL (Flechas) ---
@@ -147,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cancelAnimationFrame(animationFrameId); 
         isManualMode = true;
         
-        // Sincronizar el índice manual con la posición actual del track
         currentManualIndex = Math.round(currentPosition / (cardWidth + gap)); 
         
         let targetIndex = currentManualIndex + direction;
@@ -169,8 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             track.style.transition = 'none';
 
+            // Salto al inicio del set original (0-3) si aterrizamos en el duplicado (4-7)
             if (currentManualIndex >= originalCardCount) {
-                const resetIndex = currentManualIndex - originalCardCount;
+                const resetIndex = currentManualIndex - originalCardCount; 
                 const resetPositionPx = (cardWidth + gap) * resetIndex;
 
                 track.style.transform = `translateX(-${resetPositionPx}px)`;
@@ -188,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- ASIGNACIÓN DE EVENTOS ---
 
-    // 5. Asignar los manejadores de eventos (Flechas)
     if (nextButton) nextButton.addEventListener('click', () => {
         activateManualMode(1);
     });
@@ -196,9 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activateManualMode(-1);
     });
 
-    // 🚩 Asignar los manejadores de eventos de ARRASTRE al contenedor principal
     container.addEventListener('mousedown', handleDragStart);
-    // Para asegurar que si el mouse se suelta o sale del documento, se limpia el estado
     document.addEventListener('mouseleave', () => {
         if (isDragging) handleDragEnd();
     });
@@ -212,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
         originalTrackSize = (cardWidth + gap) * originalCardCount;
         const cardSize = cardWidth + gap;
 
-        // Limpiar arrastre si estaba activo
         if (isDragging) handleDragEnd();
         
         // Recalcular la posición al centro de la tarjeta más cercana
