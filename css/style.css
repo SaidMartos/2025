@@ -30,12 +30,9 @@ body::before {
     height: 100%;
     z-index: -1; 
     
-    /* 🚩 SOLUCIÓN AL BORDE SIN USAR ZOOM (scale): 
-       Agrandamos el pseudo-elemento con margen negativo para que el blur no se vea cortado. */
-    margin: -10px; /* Expande el contenedor para que el blur se aplique fuera del borde visible */
-    padding: 10px; /* Compensamos el margen negativo para mantener la posición */
-    
-    /* 🚩 ELIMINADO: Ya no usamos 'transform: scale(1.05);' */
+    /* SOLUCIÓN AL BORDE SIN USAR ZOOM (scale): */
+    margin: -10px; 
+    padding: 10px; 
     
     /* Propiedades de la Imagen */
     background-image: url('../img/plaza-de-armas-cajamarca.jpg'); 
@@ -49,48 +46,115 @@ body::before {
 
 
 /* ------------------------------------- */
-/* 3. ESTILOS DEL CONTENIDO (TEXTO) */
+/* 3. ESTILOS DEL CARRUSEL Y TARJETAS */
 /* ------------------------------------- */
-.content-box {
-    background-color: rgba(0, 0, 0, 0.4); 
-    padding: 40px;
-    border-radius: 10px;
-    max-width: 800px;
+
+.carousel-container {
+    width: 70vw; 
     
-    position: relative; 
+    height: 75vh; 
+    max-height: 700px; 
+    
+    position: relative;
+    overflow: hidden; 
+    border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); 
+.carousel-track {
+    display: flex;
+    /* 🚩 CLAVE CORREGIDA: Eliminamos la transición para que el JS controle el movimiento píxel a píxel */
+    /* La línea 'transition: transform 0.5s ease-in-out;' debe estar eliminada o comentada. */ 
+    gap: 60px; 
+    padding: 10px 0; 
+    height: 100%; 
+    box-sizing: border-box;
 }
 
-p {
-    font-size: 1.2em;
-    line-height: 1.6;
+.carousel-card {
+    min-width: calc(33.333% - 40px); 
+    box-sizing: border-box;
+    padding: 0;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.95); 
+    color: #333;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px; 
+    overflow: hidden;
+    height: 98%; 
 }
 
-.content-box a {
-    color: lightblue;
+.card-image {
+    width: 100%;
+    height: 400px; 
+    object-fit: cover; 
 }
-/* ------------------------------------- */
-/* 4. ESTILOS DEL BOTÓN DE UNITY */
-/* ------------------------------------- */
-.unity-button {
+
+.card-info {
+    padding: 20px;
+    text-align: center;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; 
+}
+
+.card-info h2 {
+    color: #1a73e8; 
+    margin-top: 0;
+    font-size: 1.8em; 
+}
+
+.card-info p {
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 1em; 
+}
+
+.card-link {
     display: inline-block;
-    margin-top: 30px;
-    padding: 15px 30px;
-    background-color: #007bff; /* Azul de Unity/Web */
+    padding: 10px 20px;
+    background-color: #f7a000; 
     color: white;
-    text-decoration: none; /* Quitar subrayado */
+    text-decoration: none; 
+    border-radius: 5px;
     font-weight: bold;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s;
+    margin-top: auto; 
 }
 
-.unity-button:hover {
-    background-color: #0056b3; /* Color más oscuro al pasar el ratón */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+.card-link:hover {
+    background-color: #e09100;
+}
+
+/* ------------------------------------- */
+/* 4. ESTILOS DE NAVEGACIÓN (FLECHAS) */
+/* ------------------------------------- */
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 2em;
+    z-index: 10;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.carousel-button.prev {
+    left: 10px;
+}
+
+.carousel-button.next {
+    right: 10px;
+}
+
+.carousel-button:hover {
+    background: rgba(0, 0, 0, 0.8);
 }
