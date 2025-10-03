@@ -13,10 +13,13 @@ html, body {
     text-align: center;
     
     /* Configuración flexbox para centrar todo el contenido */
+    /* Este flexbox centrará el carrusel de nuevo */
     display: flex; 
     justify-content: center;
     align-items: center;
 }
+
+/* ❌ LOGO ELIMINADO - Ya no se necesitan estos estilos */
 
 /* ------------------------------------- */
 /* 2. CONFIGURACIÓN DEL FONDO (SIN ZOOM Y BLUR COMPLETO) */
@@ -57,7 +60,11 @@ body::before {
     overflow: hidden; 
     border-radius: 50px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* 🚩 CLAVE REVERTIDA: Eliminamos el margin-top para que el carrusel se centre de nuevo */
+    margin-top: 0; 
 }
+
+/* ... (El resto de los estilos permanece igual) ... */
 
 .carousel-track {
     display: flex;
@@ -70,71 +77,67 @@ body::before {
 .carousel-card {
     min-width: calc(33.333% - 40px); 
     box-sizing: border-box;
-    /* 🚩 CLAVE 1: Quitamos padding y background para que la imagen ocupe todo */
     padding: 0; 
-    background: none; /* No hay fondo blanco */
-    color: white; /* Texto blanco para contrastar con la imagen */
+    background: none; 
+    color: white; 
     
     display: flex; 
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end; /* Alinear contenido abajo por defecto */
+    justify-content: flex-end; 
     
     border-radius: 35px; 
     overflow: hidden;
     height: 98%; 
-    position: relative; /* Para posicionar la imagen y el info */
+    position: relative; 
 }
 
 .card-image {
     width: 100%;
-    height: 100%; /* La imagen ocupa toda la altura de la tarjeta */
-    object-fit: cover; /* Cubre el área sin distorsionar */
-    position: absolute; /* Posiciona la imagen detrás del contenido */
+    height: 100%; 
+    object-fit: cover; 
+    position: absolute; 
     top: 0;
     left: 0;
-    z-index: 1; /* Detrás del texto y botón */
-    border-radius: 35px; /* Para que la imagen también se redondee */
+    z-index: 1; 
+    border-radius: 35px; 
 }
 
 .card-info {
-    position: relative; /* Para que esté encima de la imagen */
-    z-index: 2; /* Sobre la imagen */
+    position: relative; 
+    z-index: 2; 
     padding: 20px;
     text-align: center;
-    flex-grow: 0; /* Ya no ocupa espacio flexible, se ajusta a su contenido */
+    flex-grow: 0; 
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Mantiene los elementos abajo dentro del info */
+    justify-content: flex-end; 
     width: 100%;
     box-sizing: border-box;
     
-    /* 🚩 CLAVE 2: Fondo semi-transparente para el texto */
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
     
-    /* Sombra para el texto para mejor legibilidad */
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
     
-    /* Espacio para el botón */
-    padding-bottom: 80px; /* Deja espacio para el botón que estará abajo */
+    padding-bottom: 80px; 
 }
 
 .card-info h2 {
-    color: white; /* Cambiado a blanco para contrastar con el fondo oscuro */
+    color: white; 
     margin-top: 0;
     font-size: 1.8em; 
     margin-bottom: 10px;
 }
 
 .card-info p {
-    color: rgba(255, 255, 255, 0.9); /* Blanco ligeramente transparente */
-    margin-bottom: 15px; /* Espacio entre párrafo y botón (antes del padding del info) */
+    color: rgba(255, 255, 255, 0.9); 
+    margin-bottom: 15px; 
     font-size: 1em; 
 }
 
 .card-link {
-    display: block; /* Ocupa todo el ancho disponible */
-    padding: 18px 20px; /* 🚩 CLAVE 3: Aumentada la altura del padding */
+    display: block; 
+    padding: 18px 20px; 
     background-color: #DC3545; 
     color: white;
     text-decoration: none; 
@@ -142,18 +145,18 @@ body::before {
     font-weight: bold;
     transition: background-color 0.3s, transform 0.2s;
     
-    position: absolute; /* 🚩 CLAVE 4: Posiciona el botón encima de la tarjeta */
-    bottom: 20px; /* Separado del borde inferior de la tarjeta */
+    position: absolute; 
+    bottom: 20px; 
     left: 50%;
-    transform: translateX(-50%); /* Centra el botón */
-    z-index: 3; /* Asegura que esté encima de todo */
-    width: calc(100% - 40px); /* Ajusta el ancho para que tenga 20px de margen a cada lado */
-    max-width: 250px; /* Para que no sea demasiado ancho en tarjetas grandes */
+    transform: translateX(-50%); 
+    z-index: 3; 
+    width: calc(100% - 40px); 
+    max-width: 250px; 
 }
 
 .card-link:hover {
     background-color: #c82333;
-    transform: translateX(-50%) scale(1.03); /* Ligero efecto al pasar el ratón */
+    transform: translateX(-50%) scale(1.03); 
 }
 
 /* ------------------------------------- */
