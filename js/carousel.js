@@ -5,14 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextButton = document.querySelector('.carousel-button.next');
     const prevButton = document.querySelector('.carousel-button.prev');
 
-    // 🚩 CLAVE CORREGIDA: Detectar solo las tarjetas originales
+    // Detectar solo las tarjetas originales
     const originalCards = Array.from(document.querySelectorAll('.carousel-card'));
     
     // 🚩 PASO 1: DUPLICACIÓN DINÁMICA DE TARJETAS
-    // Esto asegura que, aunque el HTML solo tiene 4 tarjetas, el track tiene 8 (4 + 4) para el bucle.
     originalCards.forEach(card => {
         const clone = card.cloneNode(true);
-        // Opcional: limpiar data-index para evitar IDs duplicados
         clone.removeAttribute('data-index');
         track.appendChild(clone);
     });
@@ -21,13 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = Array.from(document.querySelectorAll('.carousel-card')); 
     
     // Parámetros de las tarjetas
-    const originalCardCount = originalCards.length; // ¡Ahora es 4!
+    const originalCardCount = originalCards.length; // Ahora es 4
+    const totalCardCount = cards.length; // Ahora es 8
     
     // 🚩 CLAVE JS: El valor del gap debe coincidir con el CSS (60px)
     const gap = 60; 
     
     let cardWidth = cards.length > 0 ? cards[0].getBoundingClientRect().width : 0;
-    // El tamaño total para el bucle ahora es el tamaño de las 4 tarjetas originales
     let originalTrackSize = (cardWidth + gap) * originalCardCount; 
     
     // Parámetros de Movimiento Automático (requestAnimationFrame)
@@ -105,10 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
         isDragging = false;
         
         const cardSize = cardWidth + gap;
+        // Calcula el índice exacto donde debe hacer el snap
         let snappedIndex = Math.round(currentPosition / cardSize); 
         
         const snappedPosition = cardSize * snappedIndex;
         
+        // 1. Deslizamiento suave (snap) a la posición más cercana
         track.style.transition = `transform ${transitionTime / 1000}s ease-out`;
         track.style.transform = `translateX(-${snappedPosition}px)`;
         currentPosition = snappedPosition;
@@ -116,13 +116,21 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             track.style.transition = 'none';
 
-            // Normalizamos al rango del set original (0 a 3)
-            let baseIndex = snappedIndex % originalCardCount;
-            if (baseIndex < 0) {
-                baseIndex += originalCardCount;
+            let resetIndex = snappedIndex;
+
+            if (snappedIndex >= originalCardCount) {
+                // Caso: Arrastre a la derecha (aterrizó en la copia)
+                // Ej: snappedIndex 4 -> resetIndex 0
+                resetIndex = snappedIndex % originalCardCount;
+            } else if (snappedIndex < 0) {
+                // 🚩 CLAVE CORREGIDA: Caso: Arrastre a la izquierda (índice negativo)
+                // Usamos el módulo para calcular el índice dentro del total (8), y luego lo llevamos al set original (4-7)
+                // Ej: snappedIndex -1 (tarjeta 3 original) -> ((-1 % 8) + 8) % 4 -> 3
+                // La solución más simple es sumarle el total de tarjetas al índice negativo y luego tomar el módulo del original.
+                resetIndex = (snappedIndex % originalCardCount + originalCardCount) % originalCardCount;
             }
 
-            const resetPosition = cardSize * baseIndex;
+            const resetPosition = cardSize * resetIndex;
 
             track.style.transform = `translateX(-${resetPosition}px)`;
             currentPosition = resetPosition;
@@ -161,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             track.style.transition = 'none';
 
-            // Salto al inicio del set original (0-3) si aterrizamos en el duplicado (4-7)
             if (currentManualIndex >= originalCardCount) {
                 const resetIndex = currentManualIndex - originalCardCount; 
                 const resetPositionPx = (cardWidth + gap) * resetIndex;
@@ -181,13 +188,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- ASIGNACIÓN DE EVENTOS ---
 
-    if (nextButton) nextButton.addEventListener('click', () => {
+    if (nextButton) nextButton.addEventListener('click', (e) => {
+        e.stopPropagation(); 
         activateManualMode(1);
     });
-    if (prevButton) prevButton.addEventListener('click', () => {
+    if (prevButton) prevButton.addEventListener('click', (e) => {
+        e.stopPropagation(); 
         activateManualMode(-1);
     });
 
+    // 🚩 Asignar los manejadores de eventos de ARRASTRE al contenedor principal
     container.addEventListener('mousedown', handleDragStart);
     document.addEventListener('mouseleave', () => {
         if (isDragging) handleDragEnd();

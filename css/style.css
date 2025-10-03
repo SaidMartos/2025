@@ -51,13 +51,10 @@ body::before {
 
 .carousel-container {
     width: 70vw; 
-    
     height: 75vh; 
     max-height: 700px; 
-    
     position: relative;
     overflow: hidden; 
-    /* Borde redondeado a 50px */
     border-radius: 50px; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -73,62 +70,90 @@ body::before {
 .carousel-card {
     min-width: calc(33.333% - 40px); 
     box-sizing: border-box;
-    padding: 0;
-    text-align: left;
-    background: rgba(255, 255, 255, 0.95); 
-    color: #333;
+    /* 🚩 CLAVE 1: Quitamos padding y background para que la imagen ocupe todo */
+    padding: 0; 
+    background: none; /* No hay fondo blanco */
+    color: white; /* Texto blanco para contrastar con la imagen */
+    
     display: flex; 
     flex-direction: column;
     align-items: center;
+    justify-content: flex-end; /* Alinear contenido abajo por defecto */
+    
     border-radius: 35px; 
     overflow: hidden;
     height: 98%; 
+    position: relative; /* Para posicionar la imagen y el info */
 }
 
 .card-image {
     width: 100%;
-    border-top-left-radius: 35px;
-    border-top-right-radius: 35px;
-    height: 400px; 
-    object-fit: cover; 
+    height: 100%; /* La imagen ocupa toda la altura de la tarjeta */
+    object-fit: cover; /* Cubre el área sin distorsionar */
+    position: absolute; /* Posiciona la imagen detrás del contenido */
+    top: 0;
+    left: 0;
+    z-index: 1; /* Detrás del texto y botón */
+    border-radius: 35px; /* Para que la imagen también se redondee */
 }
 
 .card-info {
+    position: relative; /* Para que esté encima de la imagen */
+    z-index: 2; /* Sobre la imagen */
     padding: 20px;
     text-align: center;
-    flex-grow: 1; 
+    flex-grow: 0; /* Ya no ocupa espacio flexible, se ajusta a su contenido */
     display: flex;
     flex-direction: column;
-    justify-content: space-around; 
+    justify-content: flex-end; /* Mantiene los elementos abajo dentro del info */
+    width: 100%;
+    box-sizing: border-box;
+    
+    /* 🚩 CLAVE 2: Fondo semi-transparente para el texto */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
+    
+    /* Sombra para el texto para mejor legibilidad */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+    
+    /* Espacio para el botón */
+    padding-bottom: 80px; /* Deja espacio para el botón que estará abajo */
 }
 
 .card-info h2 {
-    color: #1a73e8; 
+    color: white; /* Cambiado a blanco para contrastar con el fondo oscuro */
     margin-top: 0;
     font-size: 1.8em; 
+    margin-bottom: 10px;
 }
 
 .card-info p {
-    color: #555;
-    margin-bottom: 25px;
+    color: rgba(255, 255, 255, 0.9); /* Blanco ligeramente transparente */
+    margin-bottom: 15px; /* Espacio entre párrafo y botón (antes del padding del info) */
     font-size: 1em; 
 }
 
 .card-link {
-    display: inline-block;
-    padding: 10px 20px;
+    display: block; /* Ocupa todo el ancho disponible */
+    padding: 18px 20px; /* 🚩 CLAVE 3: Aumentada la altura del padding */
     background-color: #DC3545; 
     color: white;
     text-decoration: none; 
-    /* 🚩 CLAVE CORREGIDA: Triple de 5px = 15px */
-    border-radius: 15px; 
+    border-radius: 15px;
     font-weight: bold;
-    transition: background-color 0.3s;
-    margin-top: auto; 
+    transition: background-color 0.3s, transform 0.2s;
+    
+    position: absolute; /* 🚩 CLAVE 4: Posiciona el botón encima de la tarjeta */
+    bottom: 20px; /* Separado del borde inferior de la tarjeta */
+    left: 50%;
+    transform: translateX(-50%); /* Centra el botón */
+    z-index: 3; /* Asegura que esté encima de todo */
+    width: calc(100% - 40px); /* Ajusta el ancho para que tenga 20px de margen a cada lado */
+    max-width: 250px; /* Para que no sea demasiado ancho en tarjetas grandes */
 }
 
 .card-link:hover {
-    background-color: #c82333; 
+    background-color: #c82333;
+    transform: translateX(-50%) scale(1.03); /* Ligero efecto al pasar el ratón */
 }
 
 /* ------------------------------------- */
@@ -138,7 +163,6 @@ body::before {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    /* Botones laterales en gris semi-transparente */
     background: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
@@ -146,7 +170,6 @@ body::before {
     cursor: pointer;
     font-size: 2em;
     z-index: 10;
-    /* Borde redondeado a 10px */
     border-radius: 10px; 
     transition: background-color 0.3s;
 }
@@ -160,6 +183,5 @@ body::before {
 }
 
 .carousel-button:hover {
-    /* Negro más oscuro al pasar el ratón */
     background: rgba(0, 0, 0, 0.8);
 }
