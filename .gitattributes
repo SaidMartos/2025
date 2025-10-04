@@ -1,5 +1,8 @@
 Modelos[[:space:]]3D/Ventanillas[[:space:]]De[[:space:]]Otuzco/Build/Ventanillas[[:space:]]De[[:space:]]Otuzco.data filter=lfs diff=lfs merge=lfs -text
 Modelos[[:space:]]3D/*/Build/*.data filter=lfs diff=lfs merge=lfs -text
+Modelos[[:space:]]3D/**/*.data filter=lfs diff=lfs merge=lfs -text
+Modelos[[:space:]]3D/**/*.wasm filter=lfs diff=lfs merge=lfs -text
+Modelos[[:space:]]3D/**/*.unityweb filter=lfs diff=lfs merge=lfs -text
 **/*.data filter=lfs diff=lfs merge=lfs -text
 **/*.wasm filter=lfs diff=lfs merge=lfs -text
 **/*.unityweb filter=lfs diff=lfs merge=lfs -text
