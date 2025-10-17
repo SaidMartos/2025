@@ -3,28 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    
-    <title>Iglesia de Polloc | Kallpa 3D</title>
-    
-    <link rel="icon" type="image/x-icon" href="../../img/favicon.ico">
-
+    <title>Unity Web Player | Said</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* Evita barras de desplazamiento */
-        }
-        #unity-container {
-            width: 100% !important;
-            height: 100% !important;
-        }
-    </style>
-    </head>
+  </head>
   <body>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
@@ -70,15 +52,12 @@
       }
 
       var buildUrl = "Build";
-      // 🚩 RUTA CORREGIDA: Reemplazado " " por "_"
-      var loaderUrl = buildUrl + "/Iglesia_Polloc.loader.js";
+      var loaderUrl = buildUrl + "/Igelsia_Polloc.loader.js";
       var config = {
         arguments: [],
-        // 🚩 RUTA CORREGIDA: Reemplazado " " por "_"
-        dataUrl: buildUrl + "/Iglesia_Polloc.data",
-        frameworkUrl: buildUrl + "/Iglesia_Polloc.framework.js",
-        // 🚩 RUTA CORREGIDA: Reemplazado " " por "_"
-        codeUrl: buildUrl + "/Iglesia_Polloc.wasm",
+        dataUrl: buildUrl + "/Igelsia_Polloc.data",
+        frameworkUrl: buildUrl + "/Igelsia_Polloc.framework.js",
+        codeUrl: buildUrl + "/Igelsia_Polloc.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Said",
@@ -119,9 +98,8 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        // Modificado a 100%
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
@@ -132,13 +110,13 @@
         createUnityInstance(canvas, config, (progress) => {
           document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
               }).then((unityInstance) => {
-                  document.querySelector("#unity-loading-bar").style.display = "none";
-                  document.querySelector("#unity-fullscreen-button").onclick = () => {
-                    unityInstance.SetFullscreen(1);
-                  };
+                document.querySelector("#unity-loading-bar").style.display = "none";
+                document.querySelector("#unity-fullscreen-button").onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
 
               }).catch((message) => {
-                  alert(message);
+                alert(message);
               });
             };
 
