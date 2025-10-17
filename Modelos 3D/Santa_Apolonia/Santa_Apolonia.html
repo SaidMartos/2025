@@ -6,10 +6,45 @@
     <title>Unity Web Player | Said</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    
+    <!-- INICIO DE CÓDIGO AÑADIDO/MODIFICADO PARA FULLSCREEN -->
+    <style>
+      /* Asegura que el documento y el cuerpo ocupen el 100% del viewport */
+      html, body {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          overflow: hidden; /* Previene barras de desplazamiento no deseadas */
+      }
+  
+      /* Asegura que el contenedor principal de Unity ocupe el 100% del cuerpo */
+      #unity-container {
+          width: 100%;
+          height: 100%;
+          position: absolute; 
+          top: 0;
+          left: 0;
+          /* Asegura que la clase desktop también se ajusta si no hay style.css */
+          width: 100% !important;
+          height: 100% !important;
+      }
+      
+      /* Ajusta el canvas para llenar el contenedor */
+      #unity-canvas {
+          width: 100%;
+          height: 100%;
+          /* 'contain' asegura que todo el juego sea visible, 'cover' lo estiraría */
+          object-fit: contain; 
+      }
+    </style>
+    <!-- FIN DE CÓDIGO AÑADIDO/MODIFICADO -->
+
   </head>
   <body>
+    <!-- Se eliminaron los atributos width y height del canvas para que CSS controle el tamaño -->
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <canvas id="unity-canvas" tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -98,8 +133,9 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
+        // *** ESTAS LÍNEAS SE COMENTARON/ELIMINARON para que el CSS maneje el tamaño 100% ***
+        // canvas.style.width = "960px";
+        // canvas.style.height = "600px";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
