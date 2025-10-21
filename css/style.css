@@ -188,3 +188,72 @@ body::before {
 .carousel-button:hover {
     background: rgba(0, 0, 0, 0.8);
 }
+
+/* ------------------------------------- */
+/* 5. ESTILOS DEL DETECTOR FLOTANTE */
+/* ------------------------------------- */
+
+#interaction-detector {
+    /* Clave: Posiciona el elemento sobre todo lo demás */
+    position: fixed; 
+    top: 20px;
+    right: 20px;
+    
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    
+    background-color: rgba(0, 0, 0, 0.75); /* Fondo semitransparente oscuro */
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    
+    font-family: Arial, sans-serif;
+    width: 200px; /* Ancho fijo para el detector */
+    text-align: center;
+}
+
+#controls-top {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+/* Reutilizamos los estilos de botones, pero ajustamos el color de los iconos */
+#interaction-detector button {
+    padding: 8px 10px !important;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#interaction-detector span {
+    font-size: 1.4em !important;
+    vertical-align: middle;
+}
+
+/* Estilos de display para los contadores */
+.counter-display h2 {
+    color: white; /* Cambiamos el color para que se vea en fondo oscuro */
+    font-size: 1.4em;
+    margin: 5px 0 0;
+}
+
+.counter-display span {
+    color: #ffc107 !important; /* Amarillo para el número total */
+    font-size: 1.8em !important;
+    font-weight: bold;
+}
+
+.counter-display-small {
+    font-size: 0.9em;
+    margin-top: 5px;
+    color: #ccc;
+}
+
+#status-text {
+    font-size: 0.8em;
+    margin: 5px 0 0;
+}
+
+/* Estilos de botones (se mantienen los colores definidos antes) */
