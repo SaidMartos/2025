@@ -4,13 +4,12 @@
  * Módulo para gestionar el estado de los contadores únicos de interacción
  * usando localStorage para la persistencia entre páginas.
  */
-export class Counter {
+class Counter { // Eliminamos 'export' de la clase
     constructor() {
-        this._w_display = document.getElementById('contador-w-total');
-        this._g_display = document.getElementById('contador-g-total');
+        // En tu HTML, solo tienes 'contador-total', así que ignoraré 'w' y 'g' individuales.
         this._total_display = document.getElementById('contador-total');
         
-        // 🚨 CAMBIO CLAVE: Cargar valores desde localStorage
+        // 🚨 Cargar valores desde localStorage (cargamos el total combinando 'w' y 'g')
         this._w_total = this._load('w');
         this._g_total = this._load('g');
         
@@ -37,18 +36,19 @@ export class Counter {
     }
 
     /**
-     * Aumenta el contador total para una tecla específica ('w' o 'g').
-     * @param {string} key 'w' o 'g'
+     * Aumenta el contador total (asumiendo que cualquier interacción cuenta para 'w').
+     * En tu caso, vamos a incrementar 'w' y mantener 'g' por si lo necesitas más tarde.
+     * * @param {string} key 'w' o 'g' (Aumenta la interacción registrada)
      */
-    incrementTotal(key) {
+    addInteraction(key = 'w') {
         if (key === 'w') {
             this._w_total++;
-            this._save('w', this._w_total); // 🚨 Guardar en localStorage
+            this._save('w', this._w_total);
         } else if (key === 'g') {
             this._g_total++;
-            this._save('g', this._g_total); // 🚨 Guardar en localStorage
+            this._save('g', this._g_total);
         }
-        this.updateDisplay(); 
+        this.updateDisplay();
     }
     
     /**
@@ -69,10 +69,34 @@ export class Counter {
      * Actualiza el contenido visible en la pantalla.
      */
     updateDisplay() {
-        if (this._w_display) this._w_display.textContent = this._w_total.toString();
-        if (this._g_display) this._g_display.textContent = this._g_total.toString();
+        // Desactivado porque no tienes los elementos individuales en el HTML:
+        // if (this._w_display) this._w_display.textContent = this._w_total.toString();
+        // if (this._g_display) this._g_display.textContent = this._g_total.toString();
         
         const total = this._w_total + this._g_total;
         if (this._total_display) this._total_display.textContent = total.toString();
     }
 }
+
+
+// -----------------------------------------------------------------
+// 🚨 SOLUCIÓN AL ERROR: Exportamos una instancia única y sus métodos
+// -----------------------------------------------------------------
+
+const counterInstance = new Counter();
+
+// Exportamos las funciones que 'main.js' espera.
+export function addInteraction(key) {
+    counterInstance.addInteraction(key);
+}
+
+export function reset() {
+    counterInstance.reset();
+}
+
+export function updateDisplay() {
+    counterInstance.updateDisplay();
+}
+
+// También exportamos la instancia para el botón de reinicio en main.js
+export { counterInstance };
