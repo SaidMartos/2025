@@ -6,7 +6,9 @@
     <title>Unity Web Player | Said</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-
+    <!-- 🚨 CAMBIO 1: ENLACE AL CSS DEL DETECTOR/MENÚ (Dos niveles arriba) -->
+    <!-- Esto cargará los estilos para el detector de interacción flotante -->
+    <link rel="stylesheet" href="../../css/style.css">
     <!-- INICIO DE CÓDIGO AÑADIDO/MODIFICADO PARA FULLSCREEN -->
     <style>
       /* Asegura que el documento y el cuerpo ocupen el 100% del viewport */
@@ -146,9 +148,10 @@
         createUnityInstance(canvas, config, (progress) => {
           document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
               }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
+ document.querySelector("#unity-loading-bar").style.display = "none";
+                  document.querySelector("#unity-fullscreen-button").onclick = () => {
+                                                 // 🚨 CORRECCIÓN 2: Reemplazamos alert() por la función segura.
+                  unityShowBanner(message, 'error');
                 };
 
               }).catch((message) => {
@@ -159,5 +162,30 @@
       document.body.appendChild(script);
 
     </script>
+            
+    <!-- ****************************************************** -->
+    <!-- BLOQUE DE CONTADOR DE INTERACCIONES FLOTANTE -->
+    <!-- ****************************************************** -->
+    <div id="interaction-detector">
+          <div id="controls-top">
+              <button id="toggle-button" aria-label="Pausar/Reproducir Contador">
+                  <span id="button-icon">⏸️</span>
+              </button>
+              <button id="reset-button" aria-label="Reiniciar Contadores">
+                  <span id="reset-icon">⏹️</span>
+              </button>
+          </div>
+          <div class="counter-display">
+              <h2>Interacciones: <span id="contador-total">0</span></h2>
+          </div>
+          <p id="status-text">Estado: <strong id="current-status">Grabando</strong></p>
+    </div>
+      
+    <!-- Scripts que manejan la persistencia (localStorage) y la lógica de conteo -->
+    <script type="module" src="../../js/counter.js"></script> 
+    <script type="module" src="../../js/main.js"></script>
+    <!-- ****************************************************** -->
+    <!-- ****************************************************** -->
+
   </body>
 </html>

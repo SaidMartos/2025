@@ -7,7 +7,7 @@ const counter = new Counter();
 // Objeto para llevar el registro de las teclas que están presionadas
 const keysPressed = {};
 
-// Estado de Pausa (Falso por defecto, es decir, está en Play)
+// Estado de Pausa (Falso por defecto, es decir, está en Grabando)
 let isPaused = false; 
 
 // Referencias a los elementos del DOM para control
@@ -32,13 +32,15 @@ function togglePause() {
         toggleButton.setAttribute('aria-label', 'Reproducir Contador');
         console.log("Contador Pausado.");
     } else {
-        // Modo PLAY
+        // Modo GRABANDO
         buttonIcon.textContent = '⏸️'; // Icono de Pausa
         toggleButton.style.backgroundColor = '#ffc107'; // Color amarillo
-        currentStatus.textContent = 'Reproduciendo (Play)';
+        // 🚨 CAMBIO APLICADO AQUÍ
+        currentStatus.textContent = 'Grabando';
         currentStatus.style.color = '#28a745'; // Color verde
         toggleButton.setAttribute('aria-label', 'Pausar Contador');
-        console.log("Contador en Reproducción (Play).");
+        // 🚨 CAMBIO APLICADO AQUÍ
+        console.log("Contador en Grabación."); 
     }
 }
 
